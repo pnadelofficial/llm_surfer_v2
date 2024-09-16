@@ -6,4 +6,4 @@ duckduckgo-search
 pypdf
 nltk
 numpy 
-langchain
+langchain==0.2.16
