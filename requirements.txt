@@ -8,3 +8,4 @@ nltk
 numpy 
 langchain==0.2.16
 webdriver-manager
+lxml
