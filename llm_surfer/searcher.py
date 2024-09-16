@@ -70,7 +70,7 @@ class Searcher:
         more_pages = True
         self.results = []
         current_page = 1
-        time.sleep(5)
+        time.sleep(7)
         max_pages = int(self.webdriver.find_elements(By.CLASS_NAME, "results-number")[-1].text.split('of')[-1].strip().replace(',',''))//100 + 1
         while more_pages:
             ol = self.webdriver.find_element(By.TAG_NAME, "ol")
