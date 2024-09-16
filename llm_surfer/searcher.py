@@ -2,7 +2,6 @@ from duckduckgo_search import DDGS
 from bs4 import BeautifulSoup
 import requests
 from selenium import webdriver
-# from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
@@ -11,6 +10,7 @@ import nltk
 from tqdm import tqdm
 import re
 import io
+import time
 from typing import List, Dict, Any, Tuple
 
 nltk.download('punkt')
@@ -65,13 +65,12 @@ class Searcher:
                 url = f"https://www.congress.gov/search?q=%7B%22congress%22%3A%22all%22%2C%22source%22%3A%22all%22%2C%22search%22%3A%22{'+'.join(self.query.split(' '))}%22%2C%22bill-status%22%3A%22law%22%7D"
             else:
                 url = f"https://www.congress.gov/search?q=%7B%22congress%22%3A%22all%22%2C%22source%22%3A%22all%22%2C%22search%22%3A%22{self.query}%22%2C%22bill-status%22%3A%22law%22%7D"
-        # time.sleep(5)
         self.webdriver.get(url)
-        # time.sleep(10)
         
         more_pages = True
         self.results = []
         current_page = 1
+        time.sleep(5)
         max_pages = int(self.webdriver.find_elements(By.CLASS_NAME, "results-number")[-1].text.split('of')[-1].strip().replace(',',''))//100 + 1
         while more_pages:
             ol = self.webdriver.find_element(By.TAG_NAME, "ol")

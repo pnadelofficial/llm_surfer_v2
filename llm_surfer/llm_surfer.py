@@ -1,7 +1,6 @@
 from openai import OpenAI
 from functools import partial
 import pandas as pd
-# from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.chrome.service import Service
 from .searcher import Searcher, SeleniumService
 from .rag import Embedder, RAG  
