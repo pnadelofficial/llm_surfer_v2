@@ -5,6 +5,8 @@ import numpy as np
 import os
 from typing import Tuple
 
+nltk.download('punkt_tab')
+
 class Embedder:
     def __init__(self,
                  client: OpenAI,
