@@ -2,7 +2,8 @@ from duckduckgo_search import DDGS
 from bs4 import BeautifulSoup
 import requests
 from selenium import webdriver
-from selenium.webdriver.firefox.service import Service
+# from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
 import pypdf
@@ -24,7 +25,7 @@ class SeleniumService:
         for option in self.args:
             self.options.add_argument(option)
         self.service = Service()
-        self.driver = webdriver.Firefox(service=self.service, options=self.options)
+        self.driver = webdriver.Chrome(service=self.service, options=self.options)
 
 class Searcher:
     def __init__(self, 

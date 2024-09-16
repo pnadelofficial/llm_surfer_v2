@@ -1,8 +1,8 @@
 from openai import OpenAI
 from functools import partial
 import pandas as pd
-from selenium.webdriver.firefox.service import Service
-from webdriver_manager.firefox import GeckoDriverManager
+# from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.chrome.service import Service
 from .searcher import Searcher, SeleniumService
 from .rag import Embedder, RAG  
 from typing import List, Dict, Any, Tuple
@@ -10,7 +10,6 @@ import re
 from datetime import datetime
 import os
 from ast import literal_eval
-import platform
 
 class LLMSurfer:
     def __init__(self, 
@@ -41,13 +40,8 @@ class LLMSurfer:
         self.embedder_cb = embedder_cb
         self.surfer_cb = surfer_cb
 
-        if not platform.processor():
-            self.service = Service(GeckoDriverManager().install())
-        else:
-            self.service = Service()
-
         self.selenium_service = SeleniumService(
-            service = self.service, 
+            service = Service(), 
             args=self.args
         )   
         self.searcher = Searcher(
