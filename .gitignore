@@ -163,3 +163,5 @@ cython_debug/
 old/
 testing.ipynb
 data/
+saved_searches/
+.streamlit/

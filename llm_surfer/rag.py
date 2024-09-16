@@ -73,18 +73,22 @@ class Embedder:
         res = self.client.embeddings.create(input=texts, model=self.embedding_model)
         return np.array([r.embedding for r in res.data])
     
-    def _embed_docs(self, bs=2048) -> None:
+    def _embed_docs(self, cb: callable = None, bs=2048) -> None:
         self.batches = [self.all_chunks[i:i + bs] for i in range(0, len(self.all_chunks), bs)] # 2048 limit for oai embeddings
-        for batch in self.batches:
+        for i, batch in enumerate(self.batches):
+            if cb:
+                cb(i, len(self.batches))
             self.embedded_docs = np.vstack((self.embedded_docs, self._embed(batch))) if hasattr(self, 'embedded_docs') else self._embed(batch)
     
-    def __call__(self) -> np.ndarray:
+    def __call__(self, cb: callable = None) -> np.ndarray:
         self._chunk()
         if os.path.exists(f"./data/{self.result['title']}/embeddings.npy"):
+            if cb:
+                cb(0, 1)
             self.embedded_docs = np.load(f"./data/{self.result['title']}/embeddings.npy")
             return self.embedded_docs
         else:        
-            self._embed_docs()
+            self._embed_docs(cb=cb)
             os.makedirs(f"./data/{self.result['title']}/", exist_ok=True)
             np.save(f"./data/{self.result['title']}/embeddings.npy", self.embedded_docs)
             return self.embedded_docs
@@ -92,10 +96,11 @@ class Embedder:
 class RAG:
     def __init__(self, 
                  client: OpenAI, 
-                 embedder: Embedder) -> None:      
+                 embedder: Embedder,
+                 embedder_cb: callable = None) -> None:      
         self.client = client
         self.embedder = embedder
-        self.embedder()
+        self.embedder(cb=embedder_cb)
 
         self.embedded_docs = self.embedder.embedded_docs
         self.embedding_model = self.embedder.embedding_model

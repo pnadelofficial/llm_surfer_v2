@@ -21,7 +21,10 @@ class LLMSurfer:
                  args: List[str] = None,
                  embedding_model: str = "text-embedding-3-small",
                  max_results: int = 5, 
-                 search_engine: str = 'congress') -> None:
+                 search_engine: str = 'congress',
+                 searcher_cb: callable = None,
+                 embedder_cb: callable = None,
+                 surfer_cb: callable = None) -> None:
         self.client = client
         self.llm_name = llm_name
         self.embedding_model = embedding_model
@@ -32,6 +35,9 @@ class LLMSurfer:
         self.args = args or []
         self.max_results = max_results
         self.search_engine = search_engine
+        self.searcher_cb = searcher_cb
+        self.embedder_cb = embedder_cb
+        self.surfer_cb = surfer_cb
 
         self.selenium_service = SeleniumService(
             service = Service(), 
@@ -45,7 +51,7 @@ class LLMSurfer:
         )
     
     def get_results(self) -> None:
-        self.results = self.searcher()
+        self.results = self.searcher(cb=self.searcher_cb)
     
     def process_one(self, result: Dict[str, Any]):
         url = result['url']
@@ -57,7 +63,7 @@ class LLMSurfer:
             result=result,
             embedding_model=self.embedding_model
         )
-        context_str, context = RAG(client=self.client, embedder=embedder)(self.query)
+        context_str, context = RAG(client=self.client, embedder=embedder, embedder_cb=self.embedder_cb)(self.query)
         if isinstance(title, type(None)):
             title = url
         filled_prompt = self.base_prompt.format(research_goal=self.research_goal, url=re.escape(url), title=re.escape(title), text=re.escape(context_str))
@@ -114,6 +120,9 @@ class LLMSurfer:
                             rel_docs[result['title']][f"Most Relevant Chunk {i+1}"] = context[i]
                         else:
                             rel_docs[result['title']][f"Most Relevant Chunk {i+1}"] = "No more chunks available."
+                
+                if self.surfer_cb:
+                    self.surfer_cb(i=i, length=len(self.results), result=result, out=out)
                 print('--'*50)  
             else:
                 print(f"Skipping duplicate URL: {result['title']}")
@@ -122,9 +131,11 @@ class LLMSurfer:
         self.rel_docs = rel_docs
         self.df = pd.DataFrame.from_dict(rel_docs, orient='index').reset_index()
         self.df = self.df[self.df.columns[1:]]
+
         if (to_excel) and (len(self.df) > 0):
             now = datetime.now()
             dt_string = now.strftime("%m-%d-%Y")
             os.makedirs('./saved_searches', exist_ok=True)
-            self.df.to_excel(f'./saved_searches/{self.query}_{self.max_results}_{dt_string}_results.xlsx')
-        return self.df
+            output_path = f'./saved_searches/{self.query}_{self.max_results}_{dt_string}_results.xlsx'
+            self.df.to_excel(output_path, index=False)
+        return self.df, output_path

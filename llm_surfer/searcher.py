@@ -207,12 +207,14 @@ class Searcher:
             print(tup, "law not found. Skipping...")
             return '', '', '', ''    
     
-    def __call__(self) -> List[Dict[str, Any]]:
+    def __call__(self, cb: callable = None) -> List[Dict[str, Any]]:
         self.search()
         self.results_list = []
         res_to_loop = self.results[:self.max_results] if len(self.results) > self.max_results else self.results
         with tqdm(total=self.max_results) as pbar:
             for i, result in enumerate(res_to_loop):
+                if cb:
+                    cb(i, len(res_to_loop))
                 if len(self.results_list) >= self.max_results:
                     break
 
