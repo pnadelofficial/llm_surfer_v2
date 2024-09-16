@@ -1,0 +1,9 @@
+openai
+pandas
+selenium
+bs4
+duckduckgo-search
+pypdf
+nltk
+numpy 
+langchain
