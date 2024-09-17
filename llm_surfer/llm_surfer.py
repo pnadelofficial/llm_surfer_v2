@@ -102,30 +102,30 @@ class LLMSurfer:
                     print(f"No output from {result['url']}")
                     continue
                 relevancy = out['relevancy']
-                print(f"Result {i+1}: {relevancy}, {result['title']} because: {out['comment']}")
+                print(f"Result {i+1}: {relevancy}, {alt_title} because: {out['comment']}")
                 if self.search_engine == 'congress':
-                    rel_docs[result['title']] = {'title':result['title'], 'url':result['url'], 'relevancy':relevancy, 'llm_comment':out['comment'], 'year': date, 'alternative_title':alt_title}
+                    rel_docs[alt_title] = {'title':alt_title, 'url':result['url'], 'relevancy':relevancy, 'llm_comment':out['comment'], 'year': date}
                 else:
-                    rel_docs[result['title']] = {'title':result['title'], 'url':result['url'], 'relevancy':relevancy, 'llm_comment':out['comment']}
+                    rel_docs[alt_title] = {'title':alt_title, 'url':result['url'], 'relevancy':relevancy, 'llm_comment':out['comment']}
                 for key, value in out.items():
-                    if key not in ['title', 'url', 'relevancy', 'comment']:
-                        rel_docs[result['title']][key] = value
+                    if key not in ['alternative_title', 'title', 'url', 'relevancy', 'comment']:
+                        rel_docs[alt_title][key] = value
                 
                 if num_rel_chunks <= len(context):
                     for i in range(num_rel_chunks):
-                        rel_docs[result['title']][f"Most Relevant Chunk {i+1}"] = context[i]
+                        rel_docs[alt_title][f"Most Relevant Chunk {i+1}"] = context[i]
                 else:
                     for i in range(len(context)):
                         if i < len(context):
-                            rel_docs[result['title']][f"Most Relevant Chunk {i+1}"] = context[i]
+                            rel_docs[alt_title][f"Most Relevant Chunk {i+1}"] = context[i]
                         else:
-                            rel_docs[result['title']][f"Most Relevant Chunk {i+1}"] = "No more chunks available."
+                            rel_docs[alt_title][f"Most Relevant Chunk {i+1}"] = "No more chunks available."
                 
                 if self.surfer_cb:
                     self.surfer_cb(i=i, length=len(self.results), result=result, out=out)
                 print('--'*50)  
             else:
-                print(f"Skipping duplicate URL: {result['title']}")
+                print(f"Skipping duplicate URL: {alt_title}")
                 continue
 
         self.rel_docs = rel_docs
