@@ -11,7 +11,6 @@ import nltk
 from tqdm import tqdm
 import re
 import io
-import time
 from typing import List, Dict, Any, Tuple
 
 nltk.download('punkt')
@@ -74,7 +73,7 @@ class Searcher:
 
         wait = WebDriverWait(self.webdriver, 20)
         wait.until(lambda d: d.find_element(By.CLASS_NAME, "results-number"))
-        
+
         max_pages = int(self.webdriver.find_elements(By.CLASS_NAME, "results-number")[-1].text.split('of')[-1].strip().replace(',',''))//100 + 1
         while more_pages:
             ol = self.webdriver.find_element(By.TAG_NAME, "ol")
