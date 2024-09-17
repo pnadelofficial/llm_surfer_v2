@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import requests
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException, NoSuchElementException, WebDriverException
 import pypdf
@@ -70,7 +71,10 @@ class Searcher:
         more_pages = True
         self.results = []
         current_page = 1
-        time.sleep(7)
+
+        wait = WebDriverWait(self.webdriver, 20)
+        wait.until(lambda d: d.find_element(By.CLASS_NAME, "results-number"))
+        
         max_pages = int(self.webdriver.find_elements(By.CLASS_NAME, "results-number")[-1].text.split('of')[-1].strip().replace(',',''))//100 + 1
         while more_pages:
             ol = self.webdriver.find_element(By.TAG_NAME, "ol")
