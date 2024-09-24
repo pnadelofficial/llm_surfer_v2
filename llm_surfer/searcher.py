@@ -71,7 +71,7 @@ class Searcher:
         self.results = []
         current_page = 1
 
-        wait = WebDriverWait(self.webdriver, 20)
+        wait = WebDriverWait(self.webdriver, 60)
         wait.until(lambda d: d.find_element(By.CLASS_NAME, "results-number"))
 
         max_pages = int(self.webdriver.find_elements(By.CLASS_NAME, "results-number")[-1].text.split('of')[-1].strip().replace(',',''))//100 + 1
