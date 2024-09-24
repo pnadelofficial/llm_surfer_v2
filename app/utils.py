@@ -12,8 +12,7 @@ def embedder_cb(i, length, pbar):
         pbar.empty()
         st.success("Embedding complete!")
 
-def surfer_cb(i, length, result, out): # , pbar):
-    # pbar.progress(((i/length) + (1/length)), text='Determining relevancy...')
+def surfer_cb(i, length, result, out):
     st.markdown(f"Result: **{result['alt_title']}**")
     st.markdown(f"Relevancy: **{out['relevancy']}**")
     st.markdown(f"Comment: *{out['comment']}*")
@@ -21,8 +20,3 @@ def surfer_cb(i, length, result, out): # , pbar):
     for info in add_info:
         st.markdown(info)
     st.divider()
-    
-    # if i == length - 1:
-    #     pbar.empty()
-    #     st.success("Relevancy determination complete!")
-    
