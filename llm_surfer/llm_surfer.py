@@ -97,18 +97,18 @@ class LLMSurfer:
                 except Exception as e:
                     print(f"Error processing {result['url']}: {e}")
                     continue
-                out = literal_eval(res.choices[0].message.content)
+                out = literal_eval(res.choices[0].message.content) # sometimes had problems... 
                 if not out: 
                     print(f"No output from {result['url']}")
                     continue
                 relevancy = out['relevancy']
-                print(f"Result {i+1}: {relevancy}, {alt_title} because: {out['comment']}")
+                print(f"Result {i+1}: {relevancy}, {result['title']} because: {out['comment']}")
                 if self.search_engine == 'congress':
-                    rel_docs[alt_title] = {'title':alt_title, 'url':result['url'], 'relevancy':relevancy, 'llm_comment':out['comment'], 'year': date}
+                    rel_docs[alt_title] = {'full_title':alt_title, 'url':result['url'], 'relevancy':relevancy, 'llm_comment':out['comment'], 'year': date, 'alternative_title':result['title']}
                 else:
-                    rel_docs[alt_title] = {'title':alt_title, 'url':result['url'], 'relevancy':relevancy, 'llm_comment':out['comment']}
+                    rel_docs[alt_title] = {'full_title':alt_title, 'url':result['url'], 'relevancy':relevancy, 'llm_comment':out['comment']}
                 for key, value in out.items():
-                    if key not in ['alternative_title', 'title', 'url', 'relevancy', 'comment']:
+                    if key not in ['alternative_title', 'full_title', 'url', 'relevancy', 'comment']:
                         rel_docs[alt_title][key] = value
                 
                 if num_rel_chunks <= len(context):

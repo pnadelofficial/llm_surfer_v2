@@ -26,38 +26,39 @@ max_results = st.number_input("Max Results", min_value=1, max_value=2000, value=
 if st.button("Surf 🏄‍♀️"):
     with st.spinner("Surfing..."):
         search_pbar = st.progress(0, text='Collecting relevant documents...')
-        # try:
-        llm_surfer = LLMSurfer(
-            client=st.session_state['CLIENT'],
-            llm_name="gpt-4o-mini",
-            research_goal=research_goal,
-            base_prompt=base_prompt,
-            json_schema=json_schema,
-            query=query,
-            args=[
-                "--headless",
-                "--mute-audio",
-                '--no-sandbox',
-                '--disable-dev-shm-usage',
-                "--disable-blink-features=AutomationControlled",
-                "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0"
-            ],
-            max_results=max_results,
-            searcher_cb=partial(searcher_cb, pbar=search_pbar),
-            surfer_cb=partial(surfer_cb)
-        )
-        df, output_path = llm_surfer()
-        if st.session_state.get('RESULTS') is None:
-            st.session_state['RESULTS'] = df
-        st.write(st.session_state['RESULTS'])
-        with open(output_path, "rb") as f:
-            st.download_button("Download Results", data=f, file_name=output_path.split('/')[-1], mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-            time.sleep(30)
+        try:
+            llm_surfer = LLMSurfer(
+                client=st.session_state['CLIENT'],
+                llm_name="gpt-4o-mini",
+                research_goal=research_goal,
+                base_prompt=base_prompt,
+                json_schema=json_schema,
+                query=query,
+                args=[
+                    "--headless",
+                    "--mute-audio",
+                    '--no-sandbox',
+                    '--disable-dev-shm-usage',
+                    "--disable-blink-features=AutomationControlled",
+                    "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:90.0) Gecko/20100101 Firefox/90.0"
+                ],
+                max_results=max_results,
+                searcher_cb=partial(searcher_cb, pbar=search_pbar),
+                surfer_cb=partial(surfer_cb)
+            )
+            df, output_path = llm_surfer()
+            if st.session_state.get('RESULTS') is None:
+                st.session_state['RESULTS'] = df
+            st.write(st.session_state['RESULTS'])
+            with open(output_path, "rb") as f:
+                st.download_button("Download Results", data=f, file_name=output_path.split('/')[-1], mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        except Exception as e:
+            st.error(f"An error occurred: {e}")
+            time.sleep(60)
             clear_all()
-        # except Exception as e:
-        #     st.error(f"An error occurred: {e}")
-        #     time.sleep(30)
-        #     clear_all()
+        finally:
+            time.sleep(60)
+            clear_all()
 
 if st.button("New search"):
     clear_all()
