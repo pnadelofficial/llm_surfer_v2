@@ -52,6 +52,8 @@ if st.button("Surf 🏄‍♀️"):
             st.write(st.session_state['RESULTS'])
             with open(output_path, "rb") as f:
                 st.download_button("Download Results", data=f, file_name=output_path.split('/')[-1], mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                time.sleep(30)
+                clear_all()
         except Exception as e:
             st.error(f"An error occurred: {e}")
             time.sleep(30)
