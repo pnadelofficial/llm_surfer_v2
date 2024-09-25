@@ -14,7 +14,7 @@ def embedder_cb(i, length, pbar):
         st.success("Embedding complete!")
 
 def surfer_cb(i, length, result, out):
-    st.markdown(f"Result: **{result['alt_title']}**")
+    st.markdown(f"Result: **{result['title']}**")
     st.markdown(f"Relevancy: **{out['relevancy']}**")
     st.markdown(f"Comment: *{out['comment']}*")
     add_info = [k + ': ' + v for k, v in out.items() if k not in ['title', 'url', 'relevancy', 'comment']]
