@@ -56,9 +56,6 @@ if st.button("Surf 🏄‍♀️"):
             st.error(f"An error occurred: {e}")
             time.sleep(60)
             clear_all()
-        finally:
-            time.sleep(60)
-            clear_all()
 
 if st.button("New search"):
     clear_all()
