@@ -72,7 +72,7 @@ class Searcher:
 
         self.webdriver.get(url)
         wait = WebDriverWait(self.webdriver, 60)
-        wait.until(lambda d: d.find_element(By.CLASS_NAME, "foot_logo"))
+        wait.until(lambda d: d.execute_script('return document.readyState') == 'complete')
 
         max_pages = int(self.webdriver.find_elements(By.CLASS_NAME, "results-number")[-1].text.split('of')[-1].strip().replace(',',''))//100 + 1
         while more_pages:
