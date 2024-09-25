@@ -10,9 +10,6 @@ from datetime import datetime
 import os
 from ast import literal_eval
 
-# class LLMSurferTimeoutException(Exception):
-#     super().__init__("LLM Surfer timed out. Please refresh the page and try again.")
-
 class LLMSurfer:
     def __init__(self, 
                  client: OpenAI,
@@ -85,11 +82,7 @@ class LLMSurfer:
 
     def __call__(self, to_excel: bool = True, num_rel_chunks: int = 5) -> List[Tuple[str, Any]]:
         print(f"Collecting links from {self.searcher.search_engine}\r", flush=True)
-        # try:
         self.get_results()
-        # except LLMSurferTimeoutException as e:
-        #     raise e
-        
         print(f"{len(self.results)} links collected out of {self.max_results}. The rest are unreachable")
         rel_docs = {}
         print('--'*50)

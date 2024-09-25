@@ -1,11 +1,11 @@
 import streamlit as st
 from openai import OpenAI
 from default_prompts import research_goal, base_prompt, json_schema, query
-from utils import searcher_cb, surfer_cb 
+from utils import searcher_cb, surfer_cb, clear_all
 import sys
 import os
 from functools import partial
-import subprocess   
+import time
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -54,9 +54,10 @@ if st.button("Surf 🏄‍♀️"):
                 st.download_button("Download Results", data=f, file_name=output_path.split('/')[-1], mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
         except Exception as e:
             st.error(f"An error occurred: {e}")
+            time.sleep(30)
+            clear_all()
 
 if st.button("New search"):
-    subprocess.run(["rm", "-rf", "./data"])
-    st.rerun()
+    clear_all()
 
 st.markdown("<footer><small>Assembed by Peter Nadel | Tufts University | Tufts Technology Services | Reserch Technology</small></footer>", unsafe_allow_html=True) 

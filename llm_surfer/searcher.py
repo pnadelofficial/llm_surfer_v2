@@ -65,14 +65,14 @@ class Searcher:
                 url = f"https://www.congress.gov/search?q=%7B%22congress%22%3A%22all%22%2C%22source%22%3A%22all%22%2C%22search%22%3A%22{'+'.join(self.query.split(' '))}%22%2C%22bill-status%22%3A%22law%22%7D"
             else:
                 url = f"https://www.congress.gov/search?q=%7B%22congress%22%3A%22all%22%2C%22source%22%3A%22all%22%2C%22search%22%3A%22{self.query}%22%2C%22bill-status%22%3A%22law%22%7D"
-        self.webdriver.get(url)
-        
+        print(url)
         more_pages = True
         self.results = []
         current_page = 1
 
+        self.webdriver.get(url)
         wait = WebDriverWait(self.webdriver, 60)
-        wait.until(lambda d: d.find_element(By.CLASS_NAME, "results-number"))
+        wait.until(lambda d: d.find_element(By.CLASS_NAME, "foot_logo"))
 
         max_pages = int(self.webdriver.find_elements(By.CLASS_NAME, "results-number")[-1].text.split('of')[-1].strip().replace(',',''))//100 + 1
         while more_pages:
