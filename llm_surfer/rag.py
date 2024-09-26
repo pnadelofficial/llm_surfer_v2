@@ -84,16 +84,16 @@ class Embedder:
     
     def __call__(self, cb: callable = None) -> np.ndarray:
         self._chunk()
-        if os.path.exists(f"./data/{self.result['title']}/embeddings.npy"):
-            if cb:
-                cb(0, 1)
-            self.embedded_docs = np.load(f"./data/{self.result['title']}/embeddings.npy")
-            return self.embedded_docs
-        else:        
-            self._embed_docs(cb=cb)
-            os.makedirs(f"./data/{self.result['title']}/", exist_ok=True)
-            np.save(f"./data/{self.result['title']}/embeddings.npy", self.embedded_docs)
-            return self.embedded_docs
+        # if os.path.exists(f"./data/{self.result['title']}/embeddings.npy"):
+        #     if cb:
+        #         cb(0, 1)
+        #     self.embedded_docs = np.load(f"./data/{self.result['title']}/embeddings.npy")
+        #     return self.embedded_docs
+        # else:        
+        self._embed_docs(cb=cb)
+        # os.makedirs(f"./data/{self.result['title']}/", exist_ok=True)
+        # np.save(f"./data/{self.result['title']}/embeddings.npy", self.embedded_docs)
+        return self.embedded_docs
 
 class RAG:
     def __init__(self, 
