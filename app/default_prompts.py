@@ -19,6 +19,7 @@ Determine what hazard type it discusses. If the policy focuses on a single envir
 * Storms: More frequent and/or intense thunderstorms, wind storms, tropical storms, high winds, and storm surges.
 * Wildfire: an unplanned, unwanted fire burning in a natural area, such as a forest, grassland, or prairie.
 * Heat: A prolonged period of excessively hot weather, with temperatures above the average high.
+* Drought: A deficiency of precipitation over an extended period of time (usually a season or more), resulting in a water shortage.
 * Non-Hazard Specific: Policy does not directly address climatic hazard.
 * Multi-Hazard: Policy addresses multiple climatic hazards.
 If the policy mentions multiple environmental hazards, classify the policy as "multi-hazard".

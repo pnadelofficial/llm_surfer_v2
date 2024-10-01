@@ -51,7 +51,7 @@ if st.button("Surf 🏄‍♀️"):
                 st.session_state['RESULTS'] = df
             st.write(st.session_state['RESULTS'])
             with open(output_path, "rb") as f:
-                st.download_button("Download Results", data=f, file_name=output_path.split('/')[-1], mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                btn = st.download_button("Download Results", data=f, file_name=output_path.split('/')[-1], mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", on_click=clear_all)
         except Exception as e:
             st.error(f"An error occurred: {e}")
             time.sleep(60)
